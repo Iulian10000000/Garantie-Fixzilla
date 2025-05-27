@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Verificare Garantie - Fixzilla</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f2f2f2;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #aaa;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    #result {
+      margin-top: 20px;
+      background-color: #e8ffe8;
+      padding: 15px;
+      border-radius: 8px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Verifica Garantia Telefonului</h2>
+    <p>Introdu codul de garantie primit de la Fixzilla:</p>
+    <input type="text" id="garantieCode" placeholder="Ex: FXZ12345">
+    <button onclick="verificaGarantia()">Verifica</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const garantii = {
+      "FXZ12345": {
+        nume: "Bultoc Nicoleta",
+        dataInceput: "2025-02-09",
+        cost: "115 RON",
+        garantieZile: 120
+      },
+      "FXZ98765": {
+        nume: "Ionescu Maria",
+        dataInceput: "2025-02-01",
+        cost: "300 RON",
+        garantieZile: 90
+},
+      "FXZ0003": {
+        nume: "Slabu Draos",
+        dataInceput: "2025-05-10",
+        cost: "367 RON",
+        garantieZile: 50
+      }
+    };
+
+    function verificaGarantia() {
+      const cod = document.getElementById("garantieCode").value.trim().toUpperCase();
+      const resultDiv = document.getElementById("result");
+
+      if (garantii[cod]) {
+        const info = garantii[cod];
+        const inceput = new Date(info.dataInceput);
+        const sfarsit = new Date(inceput);
+        sfarsit.setDate(sfarsit.getDate() + info.garantieZile);
+        const azi = new Date();
+        const diferenta = Math.ceil((sfarsit - azi) / (1000 * 60 * 60 * 24));
+        const ramase = diferenta > 0 ? `${diferenta} zile ramase` : "Garan?ia a expirat";
+
+        resultDiv.innerHTML = `
+          <h3>Detalii garantie</h3>
+          <p><strong>Nume client:</strong> ${info.nume}</p>
+          <p><strong>Data inceput:</strong> ${info.dataInceput}</p>
+          <p><strong>Cost reparatie:</strong> ${info.cost}</p>
+          <p><strong>Garan?ie:</strong> ${ramase}</p>
+        `;
+        resultDiv.style.display = "block";
+      } else {
+        resultDiv.innerHTML = `<p style="color: red;">Codul introdus nu a fost gasit.</p>`;
+        resultDiv.style.display = "block";
+      }
+    }
+  </script>
+</body>
+</html>
